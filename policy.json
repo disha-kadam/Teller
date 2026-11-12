@@ -1,0 +1,35 @@
+{
+  "business_name": "Northwind Studio",
+  "currency": "USD",
+
+  "_comment": "This is the only file a business owner needs to edit. The agent is TOLD these rules so it behaves sensibly, but the rules are ENFORCED in src/policy.js by ordinary code that runs after the model has chosen its arguments. A model that ignores, misreads or is talked out of the policy still cannot move money outside these limits.",
+
+  "refunds": {
+    "auto_approve_max_amount": 250,
+    "auto_approve_max_percent_of_payment": 50,
+    "auto_approve_within_days_of_payment": 60,
+    "hard_deny_after_days": 180,
+    "daily_auto_approve_total": 1000
+  },
+
+  "invoices": {
+    "auto_send_max_amount": 10000,
+    "max_due_days": 60
+  },
+
+  "outgoing_payments": {
+    "auto_approve_max_amount": 0
+  },
+
+  "allowed_currencies": ["USD", "EUR", "GBP"],
+
+  "plain_english": [
+    "Refunds up to $250 go out automatically, as long as they are no more than 50% of what the customer actually paid and the payment is less than 60 days old.",
+    "Anything bigger than that waits for a human to approve it.",
+    "No more than $1,000 of automatic refunds in a single day. After that, everything waits for approval.",
+    "Payments older than 180 days are never refundable, by anyone, through Teller.",
+    "Invoices up to $10,000 can be created and sent automatically. Larger ones need approval.",
+    "Teller never sends money out of the account on its own. Every outgoing payment needs a human.",
+    "Only USD, EUR and GBP."
+  ]
+}

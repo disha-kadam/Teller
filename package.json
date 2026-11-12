@@ -1,0 +1,27 @@
+{
+  "name": "teller",
+  "version": "1.0.0",
+  "description": "An AI money desk for small businesses, running on PayPal, with deterministic policy guardrails and a human approval queue.",
+  "type": "module",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "seed": "node scripts/seed.js",
+    "demo": "node scripts/demo.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "paypal",
+    "ai",
+    "agent",
+    "payments",
+    "invoicing",
+    "hackathon"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}

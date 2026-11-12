@@ -1,0 +1,667 @@
+/* ---------------------------------------------------------------------------
+   Teller — "the ledger desk"
+
+   Ink on cool paper. Hairline rules instead of cards. Figures set in tabular
+   mono so columns of money line up the way they do on a statement. One bold
+   device, used once: the policy verdict stamp on anything Teller was stopped
+   from doing.
+--------------------------------------------------------------------------- */
+
+:root {
+  --ink: #121a24;
+  --ink-soft: #4a5663;
+  --ink-faint: #7d8793;
+  --paper: #eff1ed;
+  --panel: #ffffff;
+  --rule: #d6d9d2;
+  --rule-strong: #b9bdb4;
+
+  --blue: #00407d; /* ledger blue, used for action and links */
+  --green: #1c6244; /* executed */
+  --amber: #965d06; /* waiting on a human */
+  --red: #9e1f1f; /* refused outright */
+
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  --sans: 'Archivo', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --rail-w: 23.5rem;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+/* ───────────────────────────────── top bar ───────────────────────────── */
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.65rem 1.25rem;
+  background: var(--panel);
+  border-bottom: 1px solid var(--rule-strong);
+}
+
+.bar__brand {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.bar__mark {
+  width: 0.7rem;
+  height: 0.7rem;
+  border: 2px solid var(--blue);
+  border-radius: 50%;
+  translate: 0 1px;
+}
+
+.bar__name {
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  font-size: 1.05rem;
+}
+
+.bar__biz {
+  color: var(--ink-faint);
+  font-size: 0.875rem;
+}
+
+.bar__runtime {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.chip {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  border: 1px solid var(--rule);
+  padding: 0.18rem 0.5rem;
+  border-radius: 2px;
+  white-space: nowrap;
+}
+
+.chip[data-live='true'] {
+  color: var(--green);
+  border-color: color-mix(in srgb, var(--green) 35%, var(--rule));
+}
+
+.bar__reset {
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  padding: 0.2rem 0.6rem;
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+}
+
+.bar__reset:hover {
+  border-color: var(--rule-strong);
+  color: var(--ink);
+}
+
+/* ───────────────────────────────── layout ────────────────────────────── */
+
+.desk {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--rail-w);
+  height: calc(100% - 3.1rem);
+}
+
+.talk {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  border-right: 1px solid var(--rule-strong);
+}
+
+.talk__scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 2rem 2rem 1rem;
+}
+
+.talk__scroll > * {
+  max-width: 44rem;
+  margin-inline: auto;
+}
+
+/* ───────────────────────────────── opener ────────────────────────────── */
+
+.opener {
+  padding: 2.5rem 0 1rem;
+}
+
+.opener__title {
+  font-size: clamp(1.7rem, 3.4vw, 2.3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  font-weight: 600;
+  margin: 0 0 0.6rem;
+}
+
+.opener__sub {
+  margin: 0 0 1.6rem;
+  color: var(--ink-soft);
+  max-width: 34rem;
+}
+
+.opener__chips {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+
+.suggest {
+  text-align: left;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid var(--rule);
+  padding: 0.75rem 0.2rem;
+  color: var(--ink);
+  display: flex;
+  gap: 0.9rem;
+  align-items: baseline;
+}
+
+.suggest:hover {
+  background: var(--panel);
+}
+
+.suggest__tag {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  min-width: 6.5rem;
+  flex-shrink: 0;
+}
+
+.suggest__text {
+  font-size: 0.92rem;
+  line-height: 1.4;
+}
+
+/* ───────────────────────────────── messages ──────────────────────────── */
+
+.msg {
+  margin: 0 0 1.5rem;
+}
+
+.msg--user {
+  border-left: 3px solid var(--ink);
+  padding-left: 0.9rem;
+  white-space: pre-wrap;
+}
+
+.msg--teller {
+  padding-left: 0.9rem;
+  border-left: 3px solid var(--rule-strong);
+}
+
+.msg__who {
+  font-size: 0.72rem;
+  font-family: var(--mono);
+  color: var(--ink-faint);
+  margin-bottom: 0.3rem;
+}
+
+/* ───────────────────────────── the work trace ────────────────────────── */
+
+.trace {
+  margin: 0.8rem 0 0;
+  border-top: 1px solid var(--rule);
+}
+
+.step {
+  border-bottom: 1px solid var(--rule);
+  padding: 0.6rem 0 0.6rem 0.8rem;
+  border-left: 3px solid transparent;
+  position: relative;
+}
+
+.step[data-verdict='executed'] {
+  border-left-color: var(--green);
+}
+.step[data-verdict='needs_approval'] {
+  border-left-color: var(--amber);
+}
+.step[data-verdict='refused'] {
+  border-left-color: var(--red);
+}
+.step[data-verdict='error'] {
+  border-left-color: var(--red);
+}
+
+.step__top {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.step__tool {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.step__verdict {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.02em;
+}
+
+.step[data-verdict='executed'] .step__verdict {
+  color: var(--green);
+}
+.step[data-verdict='needs_approval'] .step__verdict {
+  color: var(--amber);
+}
+.step[data-verdict='refused'] .step__verdict,
+.step[data-verdict='error'] .step__verdict {
+  color: var(--red);
+}
+
+.step__rule {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+  margin-left: auto;
+}
+
+.step__args {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  margin-top: 0.25rem;
+  word-break: break-word;
+}
+
+.step__reason {
+  font-size: 0.85rem;
+  margin-top: 0.45rem;
+  color: var(--ink-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+}
+
+.step__thought {
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* The one bold device, used in one place. */
+.stamp {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 3px;
+  padding: 0.12rem 0.4rem;
+  rotate: -4deg;
+  opacity: 0.85;
+  flex-shrink: 0;
+  translate: 0 1px;
+  white-space: nowrap;
+}
+
+.stamp--hold {
+  color: var(--amber);
+  border-color: var(--amber);
+}
+
+/* ───────────────────────────────── composer ──────────────────────────── */
+
+.composer {
+  border-top: 1px solid var(--rule-strong);
+  background: var(--panel);
+  padding: 0.85rem 2rem;
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-end;
+}
+
+.composer textarea {
+  flex: 1;
+  resize: none;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  outline: none;
+  max-height: 9rem;
+  padding: 0.4rem 0;
+}
+
+.composer textarea::placeholder {
+  color: var(--ink-faint);
+}
+
+.composer button {
+  background: var(--blue);
+  color: #fff;
+  border: 0;
+  border-radius: 2px;
+  padding: 0.5rem 1.1rem;
+  font-weight: 500;
+}
+
+.composer button:disabled {
+  background: var(--rule-strong);
+}
+
+/* ───────────────────────────────── rail ──────────────────────────────── */
+
+.rail {
+  overflow-y: auto;
+  background: var(--panel);
+  padding-bottom: 3rem;
+}
+
+.rail__block {
+  padding: 1.1rem 1.25rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.rail__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  margin: 0 0 0.7rem;
+  color: var(--ink);
+}
+
+.count {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--panel);
+  background: var(--ink-faint);
+  border-radius: 2px;
+  padding: 0.05rem 0.35rem;
+}
+
+.count[data-waiting='true'] {
+  background: var(--amber);
+}
+
+.figure {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  font-size: 0.85rem;
+  color: var(--ink);
+}
+
+/* approvals — deliberately heavier than everything else, because they are
+   the only thing on screen that is asking you to do something */
+
+.approvals:empty::after {
+  content: 'Nothing waiting. Teller handled everything inside policy.';
+  display: block;
+  font-size: 0.82rem;
+  color: var(--ink-faint);
+}
+
+.approval {
+  border: 1px solid var(--amber);
+  border-left-width: 4px;
+  border-radius: 2px;
+  padding: 0.7rem 0.8rem;
+  margin-bottom: 0.7rem;
+  background: color-mix(in srgb, var(--amber) 4%, var(--panel));
+}
+
+.approval__what {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+}
+
+.approval__why {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  margin-bottom: 0.3rem;
+}
+
+.approval__ask {
+  font-size: 0.75rem;
+  color: var(--ink-faint);
+  font-style: italic;
+  margin-bottom: 0.55rem;
+}
+
+.approval__acts {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.approval__acts button {
+  border-radius: 2px;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.8rem;
+  border: 1px solid var(--rule-strong);
+  background: var(--panel);
+  color: var(--ink);
+}
+
+.approval__acts button.primary {
+  background: var(--ink);
+  color: #fff;
+  border-color: var(--ink);
+}
+
+.approval__acts button:hover {
+  filter: brightness(0.95);
+}
+
+/* receivables */
+
+.ledger,
+.audit,
+.policy {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ledger li {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.1rem 0.6rem;
+  padding: 0.45rem 0;
+  border-top: 1px solid var(--rule);
+  font-size: 0.85rem;
+}
+
+.ledger li:first-child {
+  border-top: 0;
+}
+
+.ledger__amt {
+  font-family: var(--mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.ledger__meta {
+  font-size: 0.74rem;
+  color: var(--ink-faint);
+}
+
+.ledger__meta[data-late='true'] {
+  color: var(--red);
+}
+
+.ledger__meta[data-paid='true'] {
+  color: var(--green);
+}
+
+/* policy */
+
+.policy li {
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  padding: 0.3rem 0 0.3rem 0.75rem;
+  border-left: 2px solid var(--rule);
+  margin-bottom: 0.15rem;
+}
+
+/* audit */
+
+.audit li {
+  border-top: 1px solid var(--rule);
+  padding: 0.4rem 0 0.4rem 0.6rem;
+  border-left: 3px solid var(--rule);
+  font-size: 0.78rem;
+  display: grid;
+  gap: 0.1rem;
+}
+
+.audit li:first-child {
+  border-top: 0;
+}
+
+.audit li[data-outcome='executed'] {
+  border-left-color: var(--green);
+}
+.audit li[data-outcome='queued_for_approval'] {
+  border-left-color: var(--amber);
+}
+.audit li[data-outcome='refused'],
+.audit li[data-outcome='error'],
+.audit li[data-outcome='rejected_by_human'] {
+  border-left-color: var(--red);
+}
+
+.audit__tool {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+}
+
+.audit__when {
+  font-family: var(--mono);
+  font-size: 0.68rem;
+  color: var(--ink-faint);
+}
+
+.audit__reason {
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+}
+
+.audit:empty::after {
+  content: 'Nothing yet.';
+  font-size: 0.8rem;
+  color: var(--ink-faint);
+}
+
+/* ───────────────────────────────── toast ────────────────────────────── */
+
+.toast {
+  position: fixed;
+  bottom: 1.25rem;
+  left: 50%;
+  translate: -50% 0;
+  background: var(--ink);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 2px;
+  font-size: 0.85rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.18s ease;
+}
+
+.toast[data-show='true'] {
+  opacity: 1;
+}
+
+/* ───────────────────────────────── working ───────────────────────────── */
+
+.working {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  padding-left: 0.9rem;
+}
+
+.working span {
+  animation: blink 1.1s infinite;
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .working span {
+    animation: none;
+  }
+  * {
+    transition: none !important;
+  }
+}
+
+/* ───────────────────────────────── responsive ────────────────────────── */
+
+@media (max-width: 960px) {
+  .desk {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .talk {
+    border-right: 0;
+    min-height: 70vh;
+  }
+  .talk__scroll {
+    padding: 1.25rem;
+  }
+  .composer {
+    padding: 0.75rem 1.25rem;
+    position: sticky;
+    bottom: 0;
+  }
+  .rail {
+    border-top: 1px solid var(--rule-strong);
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--blue);
+  outline-offset: 2px;
+}

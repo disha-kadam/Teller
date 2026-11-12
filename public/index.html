@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Teller — the AI money desk</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="bar">
+      <div class="bar__brand">
+        <span class="bar__mark" aria-hidden="true"></span>
+        <span class="bar__name">Teller</span>
+        <span class="bar__biz" id="bizName">—</span>
+      </div>
+      <div class="bar__runtime">
+        <span class="chip" id="chipPaypal">PayPal …</span>
+        <span class="chip" id="chipModel">Model …</span>
+        <button class="bar__reset" id="resetBtn" type="button">Reset demo</button>
+      </div>
+    </header>
+
+    <main class="desk">
+      <!-- ───────────────────────────── conversation ───────────────────── -->
+      <section class="talk" aria-label="Conversation with Teller">
+        <div class="talk__scroll" id="thread">
+          <div class="opener">
+            <h1 class="opener__title">Tell me what needs doing.</h1>
+            <p class="opener__sub">
+              I invoice people, chase them, and handle refunds on PayPal. Anything
+              outside your policy stops and waits for you.
+            </p>
+            <div class="opener__chips" id="chips"></div>
+          </div>
+        </div>
+
+        <form class="composer" id="composer">
+          <textarea
+            id="input"
+            rows="1"
+            placeholder="Invoice Acme $1,200 for October design work, net 15"
+            aria-label="Message to Teller"
+          ></textarea>
+          <button type="submit" id="sendBtn">Send</button>
+        </form>
+      </section>
+
+      <!-- ───────────────────────────── ledger rail ────────────────────── -->
+      <aside class="rail" aria-label="Ledger">
+        <section class="rail__block">
+          <h2 class="rail__head">
+            Awaiting you
+            <span class="count" id="approvalCount">0</span>
+          </h2>
+          <div id="approvals" class="approvals"></div>
+        </section>
+
+        <section class="rail__block">
+          <h2 class="rail__head">
+            Receivables
+            <span class="figure" id="outstanding">—</span>
+          </h2>
+          <ul class="ledger" id="invoices"></ul>
+        </section>
+
+        <section class="rail__block">
+          <h2 class="rail__head">Policy</h2>
+          <ul class="policy" id="policy"></ul>
+        </section>
+
+        <section class="rail__block">
+          <h2 class="rail__head">Audit trail</h2>
+          <ul class="audit" id="audit"></ul>
+        </section>
+      </aside>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
